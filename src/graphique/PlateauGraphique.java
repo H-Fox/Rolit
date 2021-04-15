@@ -2,6 +2,8 @@ package graphique;
 
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,21 +21,41 @@ public class PlateauGraphique extends JFrame {
 
 	private JButton[][] grille;
 	
-	private ImageIcon BLEU = new ImageIcon(getClass().getResource("icones/CaseBleue.png"));
-	private ImageIcon ROUGE = new ImageIcon(getClass().getResource("icones/CaseRouge.png"));
-	private ImageIcon VERT = new ImageIcon(getClass().getResource("icones/CaseVerte.png"));
-	private ImageIcon JAUNE= new ImageIcon(getClass().getResource("icones/CaseJaune.png"));
-	private ImageIcon VIDE = new ImageIcon(getClass().getResource("icones/CaseVide.png"));
+	private ImageIcon BLEU = new ImageIcon(getClass().getResource("CaseBleue.png"));
+	private ImageIcon ROUGE = new ImageIcon(getClass().getResource("CaseRouge.png"));
+	private ImageIcon VERT = new ImageIcon(getClass().getResource("CaseVerte.png"));
+	private ImageIcon JAUNE= new ImageIcon(getClass().getResource("CaseJaune.png"));
+	private ImageIcon VIDE = new ImageIcon(getClass().getResource("CaseVide.png"));
+	
+	Plateau plateau;
 
-	public PlateauGraphique(){
+	public PlateauGraphique(Plateau _plateau){
+		plateau = _plateau;
 		grille = new JButton[Plateau.dimension][Plateau.dimension];
 		setTitle("Rolit");
-		setSize(800,450);
+		setSize(300,300);
 		setLayout(new GridLayout(Plateau.dimension,Plateau.dimension));
 		Container container = getContentPane();
 		for(int i = 0; i < Plateau.dimension; i++) {
-			for(int j = 0; j < Plateau.dimension; j++) {				
+			for(int j = 0; j < Plateau.dimension; j++) {	
+				final int x = i;
+				final int y = j;
 				grille[i][j] = new JButton();
+//				grille[i][j].addActionListener(new ActionListener() {
+//					
+//					@Override
+//					public void actionPerformed(ActionEvent e) {
+//						// TODO Auto-generated method stub
+//						int[] pos = new int[2];
+//						pos[0] = x;
+//						pos[1] = y;
+//						if(plateau.placementPossible(x, pos)) {
+//							System.out.println("Placement possible");
+//							plateau.placerBille(x, pos);
+//							plateau.afficherPlateau();
+//						}
+//					}
+//				});
 				container.add(grille[i][j]);
 			}
 		}

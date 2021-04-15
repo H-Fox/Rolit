@@ -21,7 +21,7 @@ public class Plateau {
 				grille[i][j] = new Cellule(i, j , EtatsCase.VIDE);
 			}
 		}
-		affichage = new PlateauGraphique();
+		affichage = new PlateauGraphique(this);
 		initialiserPlateau();
 	}
 	
