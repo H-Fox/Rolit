@@ -90,11 +90,11 @@ public class Plateau {
 				while(temp.getEtat() != couleur) {
 					int x = temp.getPosition()[0] +1;
 					int y = temp.getPosition()[1] +1;
-//					System.out.println("Case evaluee : "+x+", "+y);
+//					System.out.println("Case evaluee : "+x+", "+y);					
+					temp = temp.getCellulesAdjacentes().get(i);
 					if(temp == null || temp.getEtat() == EtatsCase.VIDE) {
 						break;
 					}
-					temp = temp.getCellulesAdjacentes().get(i);
 					if(temp.getEtat() == couleur) {
 						return true;
 					}
@@ -117,7 +117,7 @@ public class Plateau {
 				listTemp.add(grille[position[0]][position[1]].getCellulesAdjacentes().get(i));
 				temp = grille[position[0]][position[1]].getCellulesAdjacentes().get(i);
 				
-				while(temp.getCellulesAdjacentes().get(i).getEtat() != couleur) {
+				while(temp.getEtat() != couleur) {
 					if(temp == null || temp.getEtat() == EtatsCase.VIDE) {
 						listTemp.clear();
 						break;
