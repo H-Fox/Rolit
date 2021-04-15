@@ -18,8 +18,9 @@ public class Main {
 				pos[1] = col;
 				System.out.println("Au tour du joueur "+i);				
 				Scanner sc = new Scanner(System.in);
-				
+				boolean place = false;
 				do {
+					place = false;
 					do{
 						System.out.print("Colonne: ");
 						col = sc.nextInt();
@@ -33,12 +34,16 @@ public class Main {
 					pos[0] = lig-1;
 					pos[1] = col-1;
 					if(plateau.placementPossible(i, pos)) {
+						System.out.println("Placement possible");
 						plateau.placerBille(i, pos);
 						plateau.afficherPlateau();
+						place = true;
 					}
-
+					else {
+						System.out.println("Placement impossible");
+					}
 				}
-				while(!plateau.placementPossible(i, pos));
+				while(!place);
 								
 			}
 		}

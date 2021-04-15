@@ -5,11 +5,14 @@ import java.util.List;
 
 import constantes.EtatsCase;
 import constantes.PositionsAdjacentes;
+import graphique.PlateauGraphique;
 
 public class Plateau {
 	
 	public static final int dimension = 8;
 	Cellule [][] grille;
+	
+	PlateauGraphique affichage;
 	
 	public Plateau() {
 		grille = new Cellule[dimension][dimension];
@@ -18,6 +21,7 @@ public class Plateau {
 				grille[i][j] = new Cellule(i, j , EtatsCase.VIDE);
 			}
 		}
+		affichage = new PlateauGraphique();
 		initialiserPlateau();
 	}
 	
@@ -71,20 +75,31 @@ public class Plateau {
 	}
 	
 	public boolean placementPossible(int couleur, int[] position) {
+//		System.out.println("Test placement : "+position[0]+", "+position[1]+", couleur : "+couleur);
 		for(int i = 0; i < grille[position[0]][position[1]].getCellulesAdjacentes().size(); i++) {
+//			System.out.println("Debut du for");
 			Cellule temp = null;
 			//Test a surveiller
 			if(grille[position[0]][position[1]].getCellulesAdjacentes().get(i) != null
 					&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != couleur 
 					&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != EtatsCase.VIDE) {
+//				System.out.println("Case potentielle : "+i);
+				
 				temp = grille[position[0]][position[1]].getCellulesAdjacentes().get(i);
-				while(temp.getCellulesAdjacentes().get(i).getEtat() != couleur) {
+				
+				while(temp.getEtat() != couleur) {
+					int x = temp.getPosition()[0] +1;
+					int y = temp.getPosition()[1] +1;
+//					System.out.println("Case evaluee : "+x+", "+y);
 					if(temp == null || temp.getEtat() == EtatsCase.VIDE) {
-						return false;
+						break;
 					}
 					temp = temp.getCellulesAdjacentes().get(i);
+					if(temp.getEtat() == couleur) {
+						return true;
+					}
 				}
-				return true;
+//				return true;
 			}
 		}
 		return false;
@@ -118,6 +133,7 @@ public class Plateau {
 	}
 	
 	public void afficherPlateau() {
+		affichage.afficherGraphiquement(this);
 		int temp = -1;
 		System.out.print("    ");
 		for(int k = 0; k < dimension; k++) {
