@@ -1,52 +1,75 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
+import agent.Agent;
+import agent.Capteur;
+import comparateur.ValueComparator;
 import plateau.Plateau;
 
 public class Main {
-
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		boolean jeuEnCours = true;
+		int nombreAgent = 0;
+		
+		Scanner sc = new Scanner(System.in);
+		do {
+			System.out.print("Combien d'agents souhaitez vous faire jouer ? (2 à 4) : ");
+			nombreAgent = sc.nextInt();
+		}
+		while(nombreAgent < 2 || nombreAgent > 4);
+	
 		Plateau plateau = new Plateau();
 		plateau.afficherPlateau();
 		
-		while(true) {
-			for(int i = 1; i<3; i++) {
-				int col = -1;
-				int lig = -1;
-				int[] pos = new int[2];
-				pos[0] = lig;
-				pos[1] = col;
-				System.out.println("Au tour du joueur "+i);				
-				Scanner sc = new Scanner(System.in);
-				boolean place = false;
-				do {
-					place = false;
-					do{
-						System.out.print("Colonne: ");
-						col = sc.nextInt();
-					}
-					while(col < 1 || col > 8);				
-					do{
-						System.out.print("Ligne: ");
-						lig = sc.nextInt();
-					}
-					while(lig < 1 || lig > 8);					
-					pos[0] = lig-1;
-					pos[1] = col-1;
-					if(plateau.placementPossible(i, pos)) {
-						System.out.println("Placement possible");
-						plateau.placerBille(i, pos);
-						plateau.afficherPlateau();
-						place = true;
-					}
-					else {
-						System.out.println("Placement impossible");
-					}
+		List<Agent> agents = new ArrayList<>();
+		List<Capteur> capteurs = new ArrayList<>();
+		
+		for(int i = 0; i < nombreAgent; i++) {
+			agents.add(new Agent());
+			capteurs.add(new Capteur(plateau));
+		}
+		
+		
+		while(jeuEnCours) {
+			
+			for(int i = 0; i < nombreAgent; i++) {
+				System.out.print("Tour de l'agent");
+				System.out.println(" "+agents.get(i).getCouleur());
+				capteurs.get(i).setPlateau(plateau);
+				agents.get(i).setCapteur(capteurs.get(i));
+				agents.get(i).agir();
+				jeuEnCours = agents.get(i).isEstVivant();
+				if(!jeuEnCours) {
+					plateau.calculerScore();
+					break;
 				}
-				while(!place);
-								
+				plateau.afficherPlateau();
+				try {
+					Thread.sleep(0);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
+		System.out.println("\nFin de la partie, voici le classement :\n");
+		afficherScore(plateau.calculerScore());
+	}
+	
+	public static void afficherScore(Map<String,Integer> scores) {
+		ValueComparator comparateur = new ValueComparator(scores);
+		TreeMap<String, Integer> classement = new TreeMap<String,Integer>(comparateur);
+		classement.putAll(scores);
+		for (Map.Entry m : classement.entrySet()) {
+            System.out.println("Agent "+m.getKey()+" : "+m.getValue());
+        }
+		
+		
 	}
 
 }

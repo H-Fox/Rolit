@@ -1,7 +1,9 @@
 package plateau;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import constantes.EtatsCase;
 import constantes.PositionsAdjacentes;
@@ -9,12 +11,16 @@ import graphique.PlateauGraphique;
 
 public class Plateau {
 	
+	public static int noSerie = 0;
+	
+	public int numero = -1;
 	public static final int dimension = 8;
 	Cellule [][] grille;
 	
 	PlateauGraphique affichage;
 	
 	public Plateau() {
+		numero = noSerie++;
 		grille = new Cellule[dimension][dimension];
 		for(int i = 0; i < dimension; i++) {
 			for(int j = 0; j < dimension; j++) {
@@ -27,10 +33,10 @@ public class Plateau {
 	
 	private void initialiserPlateau() {
 		//Placement des billes initialement presentes sur le plateau
-		grille[dimension/2-1][dimension/2-1].setEtat(EtatsCase.ROUGE);
-		grille[dimension/2][dimension/2-1].setEtat(EtatsCase.BLEU);
-		grille[dimension/2-1][dimension/2].setEtat(EtatsCase.JAUNE);
-		grille[dimension/2][dimension/2].setEtat(EtatsCase.VERT);
+		grille[dimension/2-1][dimension/2-1].setEtat(EtatsCase.JAUNE);
+		grille[dimension/2][dimension/2-1].setEtat(EtatsCase.VERT);
+		grille[dimension/2-1][dimension/2].setEtat(EtatsCase.BLEU);
+		grille[dimension/2][dimension/2].setEtat(EtatsCase.ROUGE);
 		
 		for(int i = 0; i < dimension; i++) {
 			for(int j = 0; j < dimension; j++) {
@@ -68,42 +74,84 @@ public class Plateau {
 		
 	}
 	
+	public Map<String,Integer> calculerScore() {
+		int rouge = 0, 
+			bleu = 0, 
+			vert = 0, 
+			jaune = 0;
+		for(int i = 0; i < dimension; i++) {
+			for(int j = 0; j < dimension; j++) {
+				switch(grille[i][j].getEtat()){
+				case EtatsCase.BLEU:
+					bleu++;
+					break;
+				case EtatsCase.JAUNE:
+					jaune++;
+					break;
+				case EtatsCase.VERT:
+					vert++;
+					break;
+				case EtatsCase.ROUGE:
+					rouge++;
+					break;
+				}
+			}
+		}
+		Map<String,Integer> scores = new HashMap<>();
+		
+		if(bleu != 0) {
+			scores.put("Bleu", bleu);
+		}
+		if(jaune != 0) {
+			scores.put("Jaune", jaune);
+		}
+		if(vert != 0) {
+			scores.put("Vert", vert);
+		}
+		if(rouge != 0) {
+			scores.put("Rouge", rouge);
+		}	
+		
+		return scores;
+	}
+	
+	//A deplacer dans effecteur
 	public void placerBille(int couleur, int[] position) {
 			grille[position[0]][position[1]].setEtat(couleur);
 			capturer(couleur, position);
 				
 	}
 	
-	public boolean placementPossible(int couleur, int[] position) {
-//		System.out.println("Test placement : "+position[0]+", "+position[1]+", couleur : "+couleur);
-		for(int i = 0; i < grille[position[0]][position[1]].getCellulesAdjacentes().size(); i++) {
-//			System.out.println("Debut du for");
-			Cellule temp = null;
-			//Test a surveiller
-			if(grille[position[0]][position[1]].getCellulesAdjacentes().get(i) != null
-					&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != couleur 
-					&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != EtatsCase.VIDE) {
-//				System.out.println("Case potentielle : "+i);
-				
-				temp = grille[position[0]][position[1]].getCellulesAdjacentes().get(i);
-				
-				while(temp.getEtat() != couleur) {
-					int x = temp.getPosition()[0] +1;
-					int y = temp.getPosition()[1] +1;
-//					System.out.println("Case evaluee : "+x+", "+y);					
-					temp = temp.getCellulesAdjacentes().get(i);
-					if(temp == null || temp.getEtat() == EtatsCase.VIDE) {
-						break;
-					}
-					if(temp.getEtat() == couleur) {
-						return true;
-					}
-				}
-//				return true;
-			}
-		}
-		return false;
-	}
+//	public boolean placementPossible(int couleur, int[] position) {
+////		System.out.println("Test placement : "+position[0]+", "+position[1]+", couleur : "+couleur);
+//		for(int i = 0; i < grille[position[0]][position[1]].getCellulesAdjacentes().size(); i++) {
+////			System.out.println("Debut du for");
+//			Cellule temp = null;
+//			//Test a surveiller
+//			if(grille[position[0]][position[1]].getCellulesAdjacentes().get(i) != null
+//					&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != couleur 
+//					&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != EtatsCase.VIDE) {
+////				System.out.println("Case potentielle : "+i);
+//				
+//				temp = grille[position[0]][position[1]].getCellulesAdjacentes().get(i);
+//				
+//				while(temp.getEtat() != couleur) {
+//					int x = temp.getPosition()[0] +1;
+//					int y = temp.getPosition()[1] +1;
+////					System.out.println("Case evaluee : "+x+", "+y);					
+//					temp = temp.getCellulesAdjacentes().get(i);
+//					if(temp == null || temp.getEtat() == EtatsCase.VIDE) {
+//						break;
+//					}
+//					if(temp.getEtat() == couleur) {
+//						return true;
+//					}
+//				}
+////				return true;
+//			}
+//		}
+//		return false;
+//	}
 	
 	public void capturer(int couleur, int[] position) {
 		for(int i = 0; i < grille[position[0]][position[1]].getCellulesAdjacentes().size(); i++) {
@@ -118,12 +166,15 @@ public class Plateau {
 				temp = grille[position[0]][position[1]].getCellulesAdjacentes().get(i);
 				
 				while(temp.getEtat() != couleur) {
+					temp = temp.getCellulesAdjacentes().get(i);
 					if(temp == null || temp.getEtat() == EtatsCase.VIDE) {
 						listTemp.clear();
 						break;
 					}
-					temp = temp.getCellulesAdjacentes().get(i);
-					listTemp.add(temp);
+					else {
+						listTemp.add(temp);
+					}
+					
 				}
 				for(Cellule cellule : listTemp) {
 					cellule.setEtat(couleur);
