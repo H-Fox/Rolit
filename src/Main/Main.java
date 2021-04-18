@@ -20,15 +20,18 @@ public class Main {
 		// TODO Auto-generated method stub
 		
 		int nombreAgent = 0;
+		int vitesse = 0;
+		
 		Accueil accueil = new Accueil();
 		
 		do {
 			
 			nombreAgent = accueil.getNombreAgent();
+			
 			System.out.print("");
 		}
 		while(nombreAgent < 2 || nombreAgent > 4);
-		
+		vitesse = accueil.getTemps();
 		boolean jeuEnCours = true;
 //		int nombreAgent = 0;
 		
@@ -66,7 +69,7 @@ public class Main {
 				}
 				plateau.afficherPlateau();
 				try {
-					Thread.sleep(0);
+					Thread.sleep(vitesse);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
