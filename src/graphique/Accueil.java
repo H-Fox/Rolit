@@ -1,0 +1,92 @@
+package graphique;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
+public class Accueil extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField nombreAgentString;
+	
+	private ImageIcon LOGO = new ImageIcon(getClass().getResource("Rolit-logo.png"));
+	
+	private int nombreAgent = 0;
+
+	/**
+	 * Create the frame.
+	 */
+	public Accueil() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		nombreAgentString = new JTextField();
+		nombreAgentString.setBounds(274, 136, 86, 20);
+		contentPane.add(nombreAgentString);
+		nombreAgentString.setColumns(10);
+		nombreAgentString.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				 if (e.getKeyCode() == KeyEvent.VK_ENTER){
+					 nombreAgent = Integer.parseInt(nombreAgentString.getText());
+						System.out.println("Returned : "+nombreAgent);
+				 }
+			}
+			
+		});
+		
+		JLabel question = new JLabel("Combien d'agents voulez vous faire jouer ?");
+		question.setBounds(10, 139, 254, 14);
+		contentPane.add(question);
+		
+		JButton logoRolit = new JButton("");
+		logoRolit.setBounds(109, 11, 215, 96);
+		contentPane.add(logoRolit);
+		logoRolit.setIcon(LOGO);
+		logoRolit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				nombreAgent = Integer.parseInt(nombreAgentString.getText());
+				System.out.println("Clicked : "+nombreAgent);
+			}
+		});
+		setLocationRelativeTo(null);
+		this.setVisible(true);
+	}
+	
+	public int getNombreAgent() {
+		return this.nombreAgent;
+	}
+}

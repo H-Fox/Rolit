@@ -1,6 +1,7 @@
 package graphique;
 
 import java.awt.Container;
+import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,7 @@ import plateau.Plateau;
 
 public class PlateauGraphique extends JFrame {
 
+	
 	/**
 	 * 
 	 */

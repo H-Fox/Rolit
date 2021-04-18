@@ -1,3 +1,4 @@
+package Main;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,21 +8,36 @@ import java.util.TreeMap;
 import agent.Agent;
 import agent.Capteur;
 import comparateur.ValueComparator;
+import graphique.Accueil;
+import graphique.TableauScores;
 import plateau.Plateau;
 
 public class Main {
 	
+//	public static int nombreAgent = 0;
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		boolean jeuEnCours = true;
-		int nombreAgent = 0;
 		
-		Scanner sc = new Scanner(System.in);
+		int nombreAgent = 0;
+		Accueil accueil = new Accueil();
+		
 		do {
-			System.out.print("Combien d'agents souhaitez vous faire jouer ? (2 à 4) : ");
-			nombreAgent = sc.nextInt();
+			
+			nombreAgent = accueil.getNombreAgent();
+			System.out.print("");
 		}
 		while(nombreAgent < 2 || nombreAgent > 4);
+		
+		boolean jeuEnCours = true;
+//		int nombreAgent = 0;
+		
+//		Scanner sc = new Scanner(System.in);
+//		do {
+//			System.out.print("Combien d'agents souhaitez vous faire jouer ? (2 à 4) : ");
+//			nombreAgent = sc.nextInt();
+//		}
+//		while(nombreAgent < 2 || nombreAgent > 4);
 	
 		Plateau plateau = new Plateau();
 		plateau.afficherPlateau();
@@ -38,8 +54,8 @@ public class Main {
 		while(jeuEnCours) {
 			
 			for(int i = 0; i < nombreAgent; i++) {
-				System.out.print("Tour de l'agent");
-				System.out.println(" "+agents.get(i).getCouleur());
+				System.out.println("Tour de l'agent "+agents.get(i).getCouleur());
+				
 				capteurs.get(i).setPlateau(plateau);
 				agents.get(i).setCapteur(capteurs.get(i));
 				agents.get(i).agir();
@@ -68,8 +84,7 @@ public class Main {
 		for (Map.Entry m : classement.entrySet()) {
             System.out.println("Agent "+m.getKey()+" : "+m.getValue());
         }
-		
-		
+		TableauScores tableauScores = new TableauScores(scores);
 	}
 
 }
