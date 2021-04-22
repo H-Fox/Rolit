@@ -3,9 +3,11 @@ package comparateur;
 import java.util.Comparator;
 import java.util.Map;
 
-public class ValueComparator implements Comparator<String> {
+public class ValueComparatorString implements Comparator<String> {
+	
 	Map<String, Integer> base;
-	public ValueComparator(Map<String, Integer> base) {
+	
+	public ValueComparatorString(Map<String, Integer> base) {
 		this.base = base;
 	}
 

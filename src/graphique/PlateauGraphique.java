@@ -20,6 +20,7 @@ public class PlateauGraphique extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private int[] posChoisie = new int[2];
 
 	private JButton[][] grille;
 	
@@ -43,21 +44,20 @@ public class PlateauGraphique extends JFrame {
 				final int x = i;
 				final int y = j;
 				grille[i][j] = new JButton();
-//				grille[i][j].addActionListener(new ActionListener() {
-//					
-//					@Override
-//					public void actionPerformed(ActionEvent e) {
-//						// TODO Auto-generated method stub
-//						int[] pos = new int[2];
-//						pos[0] = x;
-//						pos[1] = y;
-//						if(plateau.placementPossible(x, pos)) {
-//							System.out.println("Placement possible");
-//							plateau.placerBille(x, pos);
-//							plateau.afficherPlateau();
-//						}
-//					}
-//				});
+				grille[i][j].addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						if(Main.Main.tourJoueur) {
+							posChoisie = new int[2];
+							posChoisie[0] = x;
+							posChoisie[1] = y;
+							Main.Main.jouerJoueur(posChoisie);
+							System.out.println("Button clicked : "+x+", "+y);
+						}
+					}
+				});
 				container.add(grille[i][j]);
 			}
 		}

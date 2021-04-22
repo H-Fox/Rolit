@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JRadioButton;
 
 public class Accueil extends JFrame {
 
@@ -25,8 +26,10 @@ public class Accueil extends JFrame {
 
 	private int nombreAgent = 0;
 	private int temps = 0;
+	private boolean modeJoueur = false;
 	private JLabel tempsText;
 	private JTextField inputTemps;
+	private JRadioButton btnModeJoueur;
 
 	/**
 	 * Create the frame.
@@ -64,6 +67,7 @@ public class Accueil extends JFrame {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER){
 					nombreAgent = Integer.parseInt(nombreAgentString.getText());
 					temps = Integer.parseInt(inputTemps.getText())*1000;
+					modeJoueur = btnModeJoueur.isSelected();
 					System.out.println("Returned : "+nombreAgent);
 				}
 			}
@@ -106,7 +110,8 @@ public class Accueil extends JFrame {
 				// TODO Auto-generated method stub
 				if (e.getKeyCode() == KeyEvent.VK_ENTER){
 					nombreAgent = Integer.parseInt(nombreAgentString.getText());
-					temps = Integer.parseInt(inputTemps.getText())*1000;
+					temps = (int) Integer.parseInt(inputTemps.getText())*1000;
+					modeJoueur = btnModeJoueur.isSelected();
 					System.out.println("Returned : "+nombreAgent);
 					System.out.println("Returned : "+temps);
 				}
@@ -120,12 +125,27 @@ public class Accueil extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				nombreAgent = Integer.parseInt(nombreAgentString.getText());
-				temps = Integer.parseInt(inputTemps.getText())*1000;
+				temps = (int) Integer.parseInt(inputTemps.getText())*1000;
+				modeJoueur = btnModeJoueur.isSelected();
 				System.out.println("Clicked : "+nombreAgent);
 			}
 		});
+		
+		
+		JLabel lblVoulezVousJouer = new JLabel("Voulez vous jouer ?");
+		lblVoulezVousJouer.setBounds(10, 224, 254, 14);
+		contentPane.add(lblVoulezVousJouer);
+		
+		btnModeJoueur = new JRadioButton("");
+		btnModeJoueur.setBounds(274, 220, 109, 23);
+		contentPane.add(btnModeJoueur);
+		
+		
+		
 		setLocationRelativeTo(null);
 		this.setVisible(true);
+		
+		
 	}
 
 	public int getNombreAgent() {
@@ -134,5 +154,8 @@ public class Accueil extends JFrame {
 
 	public int getTemps() {
 		return this.temps;
+	}
+	public boolean getModeJoueur() {
+		return this.modeJoueur;
 	}
 }
