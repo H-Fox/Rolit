@@ -139,6 +139,33 @@ public class Accueil extends JFrame {
 		btnModeJoueur = new JRadioButton("");
 		btnModeJoueur.setBounds(274, 220, 109, 23);
 		contentPane.add(btnModeJoueur);
+		btnModeJoueur.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (e.getKeyCode() == KeyEvent.VK_ENTER){
+					nombreAgent = Integer.parseInt(nombreAgentString.getText());
+					temps = (int) Integer.parseInt(inputTemps.getText())*1000;
+					modeJoueur = btnModeJoueur.isSelected();
+					System.out.println("Returned : "+nombreAgent);
+					System.out.println("Returned : "+temps);
+				}
+			}
+			
+		});
 		
 		
 		
