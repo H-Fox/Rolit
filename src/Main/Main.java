@@ -30,27 +30,20 @@ public class Main {
 		Accueil accueil = new Accueil();
 
 		do {
-
 			nombreAgent = accueil.getNombreAgent();
-
 			System.out.print("");
 		}
 		while(nombreAgent < 2 || nombreAgent > 4);
+		
 		vitesse = accueil.getTemps();
 		modeJoueur = accueil.getModeJoueur();
+		
 		if(nombreAgent == 4) {
 			modeJoueur = false;
 			System.out.println("Impossible de jouer, il y a deja 4 agents.");
 		}
+		
 		jeuEnCours = true;
-		//		int nombreAgent = 0;
-
-		//		Scanner sc = new Scanner(System.in);
-		//		do {
-		//			System.out.print("Combien d'agents souhaitez vous faire jouer ? (2 à 4) : ");
-		//			nombreAgent = sc.nextInt();
-		//		}
-		//		while(nombreAgent < 2 || nombreAgent > 4);
 
 		plateau = new Plateau();
 		plateau.afficherPlateau();
@@ -76,12 +69,14 @@ public class Main {
 				while(plateau.checkFinPartieJoueur()) {
 					System.out.print("");
 					if(!tourJoueur) {
-						System.out.println("Plus au joueur");
+						System.out.println("Ce n'est plus au tour du joueur");
 						break;
 					}
 				}
 			}
 
+			//Gestion des tours des agents
+			//Parcours de la liste des agents
 			for(int i = 0; i < nombreAgent; i++) {
 				try {
 					Thread.sleep(vitesse);
@@ -90,10 +85,12 @@ public class Main {
 					e.printStackTrace();
 				}
 				System.out.println("Tour de l'agent "+agents.get(i).getCouleur());
-
+				//Pour chaque agent, on met a jour ses croyances avec son capteur
 				capteurs.get(i).setPlateau(plateau);
 				agents.get(i).setCapteur(capteurs.get(i));
+				//Puis on applique son fonctionnement
 				agents.get(i).jouer();
+				//Test de fin de partie
 				jeuEnCours = agents.get(i).isEstVivant();
 				if(!jeuEnCours) {
 					plateau.calculerScore();
@@ -130,14 +127,7 @@ public class Main {
 		else {
 			System.out.println("Placement incorrecte, reessayez");
 		}
-
-
 	}
-	
-	public static void checkFinDePartie() {
-		jeuEnCours = plateau.checkFinPartieJoueur();
-	}
-
 }
 
 

@@ -1,6 +1,6 @@
 package constantes;
 
-public class EtatsCase {
+public class EtatsCase {	
 	
 	public static final int VIDE = 0;
 	public static final int JAUNE = 1;
@@ -8,5 +8,4 @@ public class EtatsCase {
 	public static final int BLEU = 3;
 	public static final int VERT = 4;
 	
-
 }

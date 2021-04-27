@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Cellule {
 	
-	//boolean valable;
 	int [] position;
 	int etat;
 	List<Cellule> cellulesAdjacentes;
@@ -22,6 +21,8 @@ public class Cellule {
 		etat = _etat;
 	}
 
+	//Getters / Setters 
+	
 	public int getEtat() {
 		return etat;
 	}
@@ -38,14 +39,6 @@ public class Cellule {
 		this.position[0] = i;
 		this.position[1] = j;
 	}
-	
-//	public boolean isValable() {
-//		return valable;
-//	}
-//
-//	public void setValable(boolean valable) {
-//		this.valable = valable;
-//	}
 
 	public List<Cellule> getCellulesAdjacentes() {
 		return cellulesAdjacentes;

@@ -11,16 +11,12 @@ import graphique.PlateauGraphique;
 
 public class Plateau {
 
-	public static int noSerie = 0;
-
-	public int numero = -1;
 	public static final int dimension = 8;
 	Cellule [][] grille;
 
 	PlateauGraphique affichage;
 
 	public Plateau() {
-		numero = noSerie++;
 		grille = new Cellule[dimension][dimension];
 		for(int i = 0; i < dimension; i++) {
 			for(int j = 0; j < dimension; j++) {
@@ -31,6 +27,12 @@ public class Plateau {
 		initialiserPlateau();
 	}
 
+	/**
+	 * Initialise le plateau en positionnant les 4 premieres billes
+	 * du centre.
+	 * 
+	 * @result Plateau initialise
+	 */
 	private void initialiserPlateau() {
 		//Placement des billes initialement presentes sur le plateau
 		grille[dimension/2-1][dimension/2-1].setEtat(EtatsCase.JAUNE);
@@ -73,7 +75,12 @@ public class Plateau {
 		}
 
 	}
-
+	
+	/**
+	 * Calcule les scores pour chaque couleur et les range dans une Map<Couleur, Score>
+	 * 
+	 * @return Map des scores
+	 */
 	public Map<String,Integer> calculerScore() {
 		int rouge = 0, 
 				bleu = 0, 
@@ -140,7 +147,14 @@ public class Plateau {
 			System.out.println();
 		}
 	}
-	//Methode pour le joueur
+	
+	//Methode pour le joueur seulement
+	/**
+	 * Renvoit une map indiquant quelles cellules sont jouables ou non.
+	 * 
+	 * @return True, Cellule : Si cellule jouable //
+	 * 			False, Cellule : Sinon
+	 */
 	public Map<Boolean, List<Cellule>> determinerJouabilite(int couleur) {
 		Map<Boolean, List<Cellule>> resultat = new HashMap<>();
 
@@ -206,20 +220,17 @@ public class Plateau {
 	public boolean placementPossible(int couleur, int[] position) {
 
 			for(int i = 0; i < grille[position[0]][position[1]].getCellulesAdjacentes().size(); i++) {
-				//			System.out.println("Debut du for");
 				Cellule temp = null;
 
 				if(grille[position[0]][position[1]].getCellulesAdjacentes().get(i) != null
 						&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != couleur 
 						&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != EtatsCase.VIDE) {
-					//				System.out.println("Case potentielle : "+i);
-
+					
 					temp = grille[position[0]][position[1]].getCellulesAdjacentes().get(i);
 
 					while(temp.getEtat() != couleur) {
 						int x = temp.getPosition()[0] +1;
-						int y = temp.getPosition()[1] +1;
-						//					System.out.println("Case evaluee : "+x+", "+y);					
+						int y = temp.getPosition()[1] +1;				
 						temp = temp.getCellulesAdjacentes().get(i);
 						if(temp == null || temp.getEtat() == EtatsCase.VIDE) {
 							break;
@@ -228,15 +239,9 @@ public class Plateau {
 							return true;
 						}
 					}
-					//				return true;
 				}
 			}
-			return false;
-		
-		
-		//		System.out.println("Test placement : "+position[0]+", "+position[1]+", couleur : "+couleur);	
-
-
+			return false;	
 	}
 	
 	public boolean placementPossibleJoueur(int couleur, int[] position) {

@@ -16,15 +16,14 @@ public class Agent {
 
 	Capteur capteur = null;
 	Effecteur effecteur = null;
-
-	Plateau plateau = null;
-
+	
+	//Croyances de l'agent
 	List<int[]> casesVeryStrong;
-	List<int[]> casesStrong;
-
+	List<int[]> casesStrong;	
 	List<Cellule> cellulesJouablesCapture;
 	List<Cellule> cellulesJouablesPasCapture;
 
+	//Intentions de l'agent
 	Map<Effecteur, Integer> Prio1VeryStrongCapture;
 	Map<Effecteur, Integer> Prio2StrongCapture;
 	Map<Effecteur, Integer> Prio3Capture;
@@ -39,16 +38,13 @@ public class Agent {
 	public Agent() {
 		couleur = compteurCouleur;
 		compteurCouleur++;
+		
 		cellulesJouablesCapture = new ArrayList<>();
 		cellulesJouablesPasCapture = new ArrayList<>();
 
 		casesVeryStrong = new ArrayList<>();
 		casesStrong = new ArrayList<>();
 		initialiserCasesStrategiques();
-		//Au debut, faire une Map<Cellule,Integer> avec cellule cible et boules capturees
-		//Trier cette map et recouper avec VeryStrong, puis si necessaire Strong
-		//Si prio 3 atteinte, map deja triee
-		//Pour les 3 dernieres, juste a checker si cases vides et jouables (adjacence non vide)
 		Prio1VeryStrongCapture = new HashMap<>();		
 		Prio2StrongCapture = new HashMap<>();
 		Prio3Capture = new HashMap<>();
@@ -56,7 +52,13 @@ public class Agent {
 		Prio5PositionnementStrong = new HashMap<>();
 		Prio6PositionnementRandom = new HashMap<>();
 	}
-
+	
+	/**
+	 * Implementation des cases Very Strong et Strong dans les
+	 * croyances l'agent.
+	 *
+	 * @result Croyances de l'agent mises a jour.
+	 */
 	public void initialiserCasesStrategiques() {
 		
 		int[] temp = new int[2];
@@ -138,6 +140,12 @@ public class Agent {
 
 	}
 
+	/**
+	 * Determine les cases jouables, dans le cas ou capturer des billes
+	 * est possible, ou non.
+	 *
+	 * @result Croyances de l'agent mises a jour.
+	 */
 	public void determinerCasesJouables() {
 		cellulesJouablesCapture = new ArrayList<>();
 		cellulesJouablesPasCapture = new ArrayList<>();
@@ -150,8 +158,7 @@ public class Agent {
 				pos[1] = j;
 				if(placementPossible(couleur, pos) 
 						&& capteur.getPlateau().getGrille()[pos[0]][pos[1]].getEtat() == EtatsCase.VIDE) {
-					//Application des regles de placement
-//					System.out.println("Placement possible : "+i+", "+j);
+					//Application dela regle 1
 					cellulesJouablesCapture.add(capteur.getPlateau().getGrille()[i][j]);
 				}
 			}
@@ -172,7 +179,7 @@ public class Agent {
 				}
 				if(capteur.getPlateau().getGrille()[pos[0]][pos[1]].getEtat() == EtatsCase.VIDE
 						&& adjancenceNonVide) {
-//					System.out.println("Placement possible : "+i+", "+j);
+					//Applciation de la regle 2
 					cellulesJouablesPasCapture.add(capteur.getPlateau().getGrille()[i][j]);
 				}
 			}
@@ -181,6 +188,12 @@ public class Agent {
 
 	}
 
+	/**
+	 * Determine les actions possibles a realiser en les classant par
+	 * priorite.
+	 *
+	 * @result Intentions mises a jour.
+	 */
 	public void determinerAction() {		
 		Prio1VeryStrongCapture = new HashMap<>();
 		Prio2StrongCapture = new HashMap<>();
@@ -253,10 +266,7 @@ public class Agent {
 		//Si pas de case jouable pour capturer, on joue sans capturer en position Strong.
 		for(int[] positionStrong : casesStrong) {
 			for(Cellule celluleJouablePasCapture : cellulesJouablesPasCapture) {
-//				System.out.println("Pos Strong : "+positionStrong[0]+", "+positionStrong[1]);
-//				System.out.println("Pos Pas capture : "+celluleJouablePasCapture.getPosition()[0]+", "+celluleJouablePasCapture.getPosition()[1]);
 				if(comparerPosition(positionStrong, celluleJouablePasCapture.getPosition())) {
-//					System.out.println("Prio 5 : "+celluleJouablePasCapture.getPosition()[0]+", "+celluleJouablePasCapture.getPosition()[1]);
 					Prio5PositionnementStrong
 					.put(new Effecteur(celluleJouablePasCapture, capteur.getPlateau())
 							, 0);
@@ -277,6 +287,13 @@ public class Agent {
 
 	}
 	
+	/**
+	 * Choisit l'action a effectuer par ordre de priorite.
+	 * 
+	 * (Prise de decision)
+	 *
+	 * @result Effecteur mis a jour.
+	 */
 	public void choisirAction() {
 		Effecteur eff = null;
 		
@@ -351,6 +368,11 @@ public class Agent {
 		effecteur = eff;
 	}
 
+	/**
+	 * Si la partie n'est pas finie, l'agent agit via son effecteur.
+	 *
+	 * @result Modifie l'etat de l'environnement en plaçant une bille.
+	 */
 	public void agir() {
 		capteur.checkFinPartie();
 		this.estVivant = capteur.isPartieEnCours();
@@ -359,37 +381,38 @@ public class Agent {
 		}
 	}
 
+	/**
+	 * Combine l'observation, la determination des actions possibles, la prise 
+	 * decision et l'action.
+	 *
+	 * @result L'agent joue son tour.
+	 */
 	public void jouer() {
 		determinerCasesJouables();
 		determinerAction();
-//		System.out.println("Prio 1 : "+Prio1VeryStrongCapture.size());
-//		System.out.println("Prio 2 : "+Prio2StrongCapture.size());
-//		System.out.println("Prio 3 : "+Prio3Capture.size());
-//		System.out.println("Prio 4 : "+Prio4PositionnementVeryStrong.size());
-//		System.out.println("Prio 5 : "+Prio5PositionnementStrong.size());
-//		System.out.println("Prio 6 : "+Prio6PositionnementRandom.size());
 		choisirAction();
-//		System.out.println("");
 		agir();
 	}
 
+	/**
+	 * Determine si le placement d'une bille est possible pour la couleur et la position donnee.
+	 *
+	 * @return True : Si placement possible
+	 * 			False : Sinon
+	 */
 	public boolean placementPossible(int couleur, int[] position) {
-		//		System.out.println("Test placement : "+position[0]+", "+position[1]+", couleur : "+couleur);
 		for(int i = 0; i < capteur.getPlateau().getGrille()[position[0]][position[1]].getCellulesAdjacentes().size(); i++) {
-			//			System.out.println("Debut du for");
 			Cellule temp = null;
 
 			if(capteur.getPlateau().getGrille()[position[0]][position[1]].getCellulesAdjacentes().get(i) != null
 					&& capteur.getPlateau().getGrille()[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != couleur 
 					&& capteur.getPlateau().getGrille()[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != EtatsCase.VIDE) {
-				//				System.out.println("Case potentielle : "+i);
 
 				temp = capteur.getPlateau().getGrille()[position[0]][position[1]].getCellulesAdjacentes().get(i);
 
 				while(temp.getEtat() != couleur) {
 					int x = temp.getPosition()[0] +1;
-					int y = temp.getPosition()[1] +1;
-					//					System.out.println("Case evaluee : "+x+", "+y);					
+					int y = temp.getPosition()[1] +1;				
 					temp = temp.getCellulesAdjacentes().get(i);
 					if(temp == null || temp.getEtat() == EtatsCase.VIDE) {
 						break;
@@ -398,38 +421,37 @@ public class Agent {
 						return true;
 					}
 				}
-				//				return true;
 			}
 		}
 		return false;
 	}
 
+	/**
+	 * Compte les billes capturables pour un placement d'une bille de la couleur et a la position donnees
+	 *
+	 * @return Nombre de billes capturables
+	 */
 	public int compteurBillesCapturables(int couleur, int[] position) {
 		int compteur = 0;
 
 		Cellule[][] grille = capteur.getPlateau().getGrille();
 
-//		System.out.println("Position ciblee : "+position[0]+", "+position[1]);
 		for(int i = 0; i < grille[position[0]][position[1]].getCellulesAdjacentes().size(); i++) {
 			List<Cellule> listTemp = new ArrayList<>();
 			Cellule temp = null;
-			//Test a surveiller
 			if(grille[position[0]][position[1]].getCellulesAdjacentes().get(i) != null
 					&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != couleur 
 					&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != EtatsCase.VIDE) {
 
 				listTemp.add(grille[position[0]][position[1]].getCellulesAdjacentes().get(i));
 				temp = grille[position[0]][position[1]].getCellulesAdjacentes().get(i);
-//				System.out.println("Ajout case adjacente : "+temp.getPosition()[0]+", "+temp.getPosition()[1]);
 				while(temp.getEtat() != couleur) {
 					temp = temp.getCellulesAdjacentes().get(i);
 					if(temp == null || temp.getEtat() == EtatsCase.VIDE) {
 						listTemp.clear();
-//						System.out.println("Liste vide");
 						break;
 					}
 					else if(temp.getEtat() != couleur){
-//						System.out.println("Ajout case : "+temp.getPosition()[0]+", "+temp.getPosition()[1]);
 						listTemp.add(temp);
 
 					}
@@ -437,10 +459,15 @@ public class Agent {
 				compteur += listTemp.size();
 			}
 		}
-//		System.out.println("Nombre de bille(s) capturee(s) : "+compteur);
 		return compteur;
 	}
 
+	/**
+	 * Compare l'egalite entre 2 positions.
+	 *
+	 * @return True : Egalite
+	 * 			False : Sinon
+	 */
 	public boolean comparerPosition(int[] position1, int[] position2) {
 		if(position1[0] == position2[0] && position1[1] == position2[1]) {
 			return true;
@@ -448,14 +475,13 @@ public class Agent {
 		return false;
 	}
 
-
+	//Getters / Setters
 	public Capteur getCapteur() {
 		return capteur;
 	}
 
 	public void setCapteur(Capteur capteur) {
 		this.capteur = capteur;
-		plateau = capteur.getPlateau();
 	}
 
 	public Effecteur getEffecteur() {
@@ -497,9 +523,4 @@ public class Agent {
 	public void setCellulesJouablesPasCapture(List<Cellule> cellulesJouablesPasCapture) {
 		this.cellulesJouablesPasCapture = cellulesJouablesPasCapture;
 	}
-
-
-
-
-
 }

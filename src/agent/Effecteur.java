@@ -16,12 +16,22 @@ public class Effecteur {
 		plateau = _plateau;
 	}
 
+	/**
+	 * Place la bille sur le plateau et capture les billes concernees.
+	 *
+	 * @result Plateau mis a jour avec la bille placee et les billes capturees.
+	 */
 	public void placerBille(int couleur) {
 		plateau.getGrille()[celluleCiblee.getPosition()[0]][celluleCiblee.getPosition()[1]].setEtat(couleur);
 		capturer(couleur);
 
 	}
 
+	/**
+	 * Determine les billes capturees et change leur etat pour leur donner leur nouvelle couleur.
+	 *
+	 * @result Plateau mis a jour avec les billes capturees.
+	 */
 	public void capturer(int couleur) {
 		int compteur = 0;
 
@@ -29,11 +39,9 @@ public class Effecteur {
 		
 		Cellule[][] grille = plateau.getGrille();
 
-//		System.out.println("Position ciblee : "+position[0]+", "+position[1]);
 		for(int i = 0; i < grille[position[0]][position[1]].getCellulesAdjacentes().size(); i++) {
 			List<Cellule> listTemp = new ArrayList<>();
 			Cellule temp = null;
-			//Test a surveiller
 			if(grille[position[0]][position[1]].getCellulesAdjacentes().get(i) != null
 					&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != couleur 
 					&& grille[position[0]][position[1]].getCellulesAdjacentes().get(i).getEtat() != EtatsCase.VIDE) {
@@ -44,7 +52,6 @@ public class Effecteur {
 					temp = temp.getCellulesAdjacentes().get(i);
 					if(temp == null || temp.getEtat() == EtatsCase.VIDE) {
 						listTemp.clear();
-//						System.out.println("Liste vide");
 						break;
 					}
 					else if(temp.getEtat() != couleur){
@@ -58,8 +65,6 @@ public class Effecteur {
 				}
 			}
 		}
-//		System.out.println("Nombre de bille(s) capturee(s) : "+compteur);
-
 	}
 
 }

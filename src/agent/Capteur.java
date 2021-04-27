@@ -6,17 +6,17 @@ import plateau.*;
 public class Capteur {
 
 	boolean partieEnCours = true;
-
 	Plateau plateau;
 
 	public Capteur(Plateau _plateau) {
 		plateau = _plateau;
 	}
 
-	public void capter(Plateau _plateau) {
-		plateau = _plateau;
-	}
-
+	/**
+	 * Verifie si la partie est terminee.
+	 *
+	 * @result Booleen partieEnCours mis a jour.
+	 */
 	public void checkFinPartie() {
 		boolean temp = false;
 		for(int i = 0; i < Plateau.dimension; i++) {
@@ -32,11 +32,12 @@ public class Capteur {
 		}
 	}
 	
+	//Getters / Setters
 	public Plateau getPlateau() {
 		return plateau;
 	}
 
-	public void setPlateau(Plateau plateau) {
+	public void setPlateau(Plateau plateau) {//Setter utilise pour capter l'environnement
 		this.plateau = plateau;
 	}
 
